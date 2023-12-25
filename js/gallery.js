@@ -95,3 +95,31 @@ const addGalleryItem = images => {
 };
 
 addGalleryItem(images);
+
+galleryList.addEventListener('click', handleImageClick);
+
+function handleImageClick(event) {
+  if (event.target === event.currentTarget) {
+    return;
+  }
+
+  const imgEl = event.target;
+  if (imgEl) {
+    const instance = basicLightbox.create(`
+    <div class="modal">
+    <img src="${imgEl.dataset.source}" alt="${imgEl.alt}">
+    <h2>${imgEl.alt}</h2>
+    </div>
+`);
+    instance.show();
+
+    document.addEventListener('keydown', handleEscapeKeyPress);
+
+    function handleEscapeKeyPress(event) {
+      if (event.key === 'Escape' && instance) {
+        instance.close();
+        document.removeEventListener('keydown', handleEscapeKeyPress);
+      }
+    }
+  }
+}
